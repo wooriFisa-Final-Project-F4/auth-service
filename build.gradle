@@ -31,6 +31,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.modelmapper:modelmapper:2.4.2'
 
 	// jwt 설
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
@@ -38,11 +39,11 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
 	compileOnly 'org.projectlombok:lombok'
-
-	runtimeOnly 'com.h2database:h2'
-	runtimeOnly 'com.mysql:mysql-connector-j'
-
 	annotationProcessor 'org.projectlombok:lombok'
+
+	runtimeOnly 'com.mysql:mysql-connector-j' // 개발 환경에서 사용하는 DB (Mysql)
+	runtimeOnly 'com.h2database:h2' // 테스트 코드 작성시 사용할 DB (H2)
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
