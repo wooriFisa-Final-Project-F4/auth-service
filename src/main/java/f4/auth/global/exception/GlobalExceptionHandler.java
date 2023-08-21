@@ -14,6 +14,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({CustomException.class})
     public ResponseEntity<?> customExceptionHandler(CustomException e) {
+        log.error("errorCode: {}, path: {}, message",
+                e.getCustomErrorCode().getCode(), e.getCustomErrorCode().getPath(), e.getCustomErrorCode().getMessage());
+
         return new ResponseEntity<>(
                 ErrorDetails.builder()
                         .path(e.getCustomErrorCode().getPath())
