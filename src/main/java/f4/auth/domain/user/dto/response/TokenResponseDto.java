@@ -9,8 +9,7 @@ import lombok.Setter;
 @Builder
 public class TokenResponseDto {
 
-    @Builder.Default
-    private String grantType = "Bearer";
-    private String accessToken;
-    private String refreshToken;
+  @Builder.Default private String grantType = "Bearer";
+  private String accessToken;
+  private String refreshToken;
 }

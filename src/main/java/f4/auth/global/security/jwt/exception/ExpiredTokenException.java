@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class ExpiredTokenException extends CustomException {
 
-    public ExpiredTokenException(CustomErrorCode customErrorCode) {
-        super(customErrorCode);
-    }
+  public ExpiredTokenException(CustomErrorCode customErrorCode) {
+    super(customErrorCode);
+  }
 }

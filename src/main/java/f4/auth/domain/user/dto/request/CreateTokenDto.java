@@ -1,6 +1,11 @@
 package f4.auth.domain.user.dto.request;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -9,7 +14,7 @@ import lombok.*;
 @AllArgsConstructor
 public class CreateTokenDto {
 
-    private Long id;
-    private String username;
-    private String email;
+  private Long id;
+  private String username;
+  private String email;
 }

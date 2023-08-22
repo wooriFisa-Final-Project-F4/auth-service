@@ -10,18 +10,16 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class JwtValidateService {
 
-    private final JwtTokenProvider jwtTokenProvider;
-    private final RedisService redisService;
+  private final JwtTokenProvider jwtTokenProvider;
+  private final RedisService redisService;
 
+  public String getEmail(String token) {
+    return jwtTokenProvider.extractAllClaims(token).get("email", String.class);
+  }
 
-    public String getEmail(String token) {
-        return jwtTokenProvider.extractAllClaims(token)
-                .get("email", String.class);
+  public void validateRefreshToken(String token) {
+    if (redisService.getData(getEmail(token)) == null) {
+      throw new CustomException(CustomErrorCode.INVALID_ACCESS_TOKEN);
     }
-
-    public void validateRefreshToken(String token) {
-        if (redisService.getData(getEmail(token)) == null) {
-            throw new CustomException(CustomErrorCode.INVALID_ACCESS_TOKEN);
-        }
-    }
+  }
 }

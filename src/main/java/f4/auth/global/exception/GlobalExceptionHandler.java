@@ -12,29 +12,27 @@ import java.security.NoSuchAlgorithmException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({CustomException.class})
-    public ResponseEntity<?> customExceptionHandler(CustomException e) {
-        log.error("errorCode: {}, path: {}, message",
-                e.getCustomErrorCode().getCode(), e.getCustomErrorCode().getPath(), e.getCustomErrorCode().getMessage());
+  @ExceptionHandler({CustomException.class})
+  public ResponseEntity<?> customExceptionHandler(CustomException e) {
+    log.error(
+        "errorCode: {}, path: {}, message",
+        e.getCustomErrorCode().getCode(),
+        e.getCustomErrorCode().getPath(),
+        e.getCustomErrorCode().getMessage());
 
-        return new ResponseEntity<>(
-                ErrorDetails.builder()
-                        .path(e.getCustomErrorCode().getPath())
-                        .code(e.getCustomErrorCode().getCode())
-                        .message(e.getCustomErrorCode().getMessage())
-                        .build(),
-                HttpStatus.BAD_REQUEST
-        );
-    }
+    return new ResponseEntity<>(
+        ErrorDetails.builder()
+            .path(e.getCustomErrorCode().getPath())
+            .code(e.getCustomErrorCode().getCode())
+            .message(e.getCustomErrorCode().getMessage())
+            .build(),
+        HttpStatus.BAD_REQUEST);
+  }
 
-    @ExceptionHandler({NoSuchAlgorithmException.class})
-    public ResponseEntity<?> noSuchAlgorithmExceptionHandler(NoSuchAlgorithmException e) {
-        return new ResponseEntity(
-                ErrorDetails.builder()
-                        .code(500)
-                        .message("암호화를 수행할 수 없습니다.")
-                        .build(),
-                HttpStatus.INTERNAL_SERVER_ERROR
-        );
-    }
+  @ExceptionHandler({NoSuchAlgorithmException.class})
+  public ResponseEntity<?> noSuchAlgorithmExceptionHandler(NoSuchAlgorithmException e) {
+    return new ResponseEntity(
+        ErrorDetails.builder().code(500).message("암호화를 수행할 수 없습니다.").build(),
+        HttpStatus.INTERNAL_SERVER_ERROR);
+  }
 }
