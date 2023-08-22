@@ -6,5 +6,5 @@ import f4.auth.domain.user.dto.response.TokenResponseDto;
 public interface AuthService {
 
     TokenResponseDto login(LoginRequestDto loginDto);
-    TokenResponseDto getNewAccessToken(String rtk);
+    TokenResponseDto reIssue(String rtk);
 }

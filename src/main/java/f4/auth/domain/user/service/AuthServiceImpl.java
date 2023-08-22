@@ -49,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
 
         final String atk = jwtTokenProvider.createAccessToken(createTokenDto);
         final String rtk = jwtTokenProvider.createRefreshToken(createTokenDto);
-        redisService.setDataExpire(loginDto.getEmail(), rtk, Duration.ofMillis(atkDuration));
+        redisService.setDataExpire(loginDto.getEmail(), rtk, Duration.ofMillis(rtkDuration));
 
 
         return TokenResponseDto.builder()
@@ -59,7 +59,19 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public TokenResponseDto getNewAccessToken(String rtk) {
-        return null;
+    @Transactional
+    public TokenResponseDto reIssue(String rtk) {
+        jwtValidateService.validateRefreshToken(rtk);
+
+        Member member = memberRepository.findByEmail(jwtValidateService.getEmail(rtk))
+                .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_MEMBER));
+
+        return TokenResponseDto.builder()
+                .accessToken(
+                        jwtTokenProvider.createAccessToken(
+                                modelMapper.map(member, CreateTokenDto.class)
+                        )
+                )
+                .build();
     }
 }
