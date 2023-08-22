@@ -15,7 +15,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler({CustomException.class})
   public ResponseEntity<?> customExceptionHandler(CustomException e) {
     log.error(
-        "errorCode: {}, path: {}, message",
+        "errorCode: {}, path: {}, message: {}",
         e.getCustomErrorCode().getCode(),
         e.getCustomErrorCode().getPath(),
         e.getCustomErrorCode().getMessage());
@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler({NoSuchAlgorithmException.class})
   public ResponseEntity<?> noSuchAlgorithmExceptionHandler(NoSuchAlgorithmException e) {
-    return new ResponseEntity(
+    return new ResponseEntity<>(
         ErrorDetails.builder().code(500).message("암호화를 수행할 수 없습니다.").build(),
         HttpStatus.INTERNAL_SERVER_ERROR);
   }

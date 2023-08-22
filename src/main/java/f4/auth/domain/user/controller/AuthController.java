@@ -3,14 +3,11 @@ package f4.auth.domain.user.controller;
 import f4.auth.domain.user.dto.request.LoginRequestDto;
 import f4.auth.domain.user.dto.response.TokenResponseDto;
 import f4.auth.domain.user.service.AuthService;
+import f4.auth.global.security.jwt.JwtTokenProvider;
+import f4.auth.global.security.jwt.JwtValidateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -20,6 +17,7 @@ import javax.validation.Valid;
 public class AuthController {
 
   private final AuthService authService;
+  private final JwtValidateService jwtValidateService;
 
   @PostMapping("/login")
   public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto dto) {

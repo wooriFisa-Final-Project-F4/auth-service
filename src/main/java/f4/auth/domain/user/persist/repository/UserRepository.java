@@ -1,13 +1,13 @@
 package f4.auth.domain.user.persist.repository;
 
-import f4.auth.domain.user.persist.entity.Member;
+import f4.auth.domain.user.persist.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
-  Optional<Member> findByEmail(String email);
+  Optional<User> findByEmail(String email);
 }

@@ -2,9 +2,9 @@ package f4.auth.domain.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import f4.auth.domain.user.dto.request.SignupRequestDto;
-import f4.auth.domain.user.persist.entity.Member;
-import f4.auth.domain.user.persist.repository.MemberRepository;
-import f4.auth.domain.user.service.MemberService;
+import f4.auth.domain.user.persist.entity.User;
+import f4.auth.domain.user.persist.repository.UserRepository;
+import f4.auth.domain.user.service.UserService;
 import f4.auth.global.exception.GlobalExceptionHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,20 +29,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(MemberController.class)
+@WebMvcTest(UserController.class)
 @ExtendWith(SpringExtension.class)
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
-@DisplayName("Member-Controller 테스트")
-class MemberControllerTest {
+@DisplayName("User-Controller 테스트")
+class UserControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
 
     @MockBean
-    private MemberRepository memberRepository;
+    private UserRepository userRepository;
 
     @MockBean
-    private MemberService memberService;
+    private UserService userService;
 
     @Autowired
 
@@ -51,7 +51,7 @@ class MemberControllerTest {
 
     @BeforeEach
     public void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(new MemberController(memberService, memberRepository))
+        mockMvc = MockMvcBuilders.standaloneSetup(new UserController(userService, userRepository))
                 .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
     }
@@ -95,7 +95,7 @@ class MemberControllerTest {
                 .build();
 
         //when
-        when(memberRepository.findByEmail(any())).thenReturn(Optional.of(Member.builder().email("soohyuk96@naver.com").build()));
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(User.builder().email("soohyuk96@naver.com").build()));
 
         // then
         mockMvc.perform(post("/auth/v1/signup")
