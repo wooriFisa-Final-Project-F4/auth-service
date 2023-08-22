@@ -1,11 +1,21 @@
 package f4.auth.domain.user.persist.entity;
 
 import f4.auth.domain.user.constant.Role;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 @Getter
@@ -15,40 +25,40 @@ import java.time.LocalDateTime;
 @Entity
 public class Member {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(name = "name")
-    private String username;
+  @Column(name = "name")
+  private String username;
 
-    @Column(name = "gender")
-    private String gender;
+  @Column(name = "gender")
+  private String gender;
 
-    @Column(name = "birth")
-    private String birth;
+  @Column(name = "birth")
+  private String birth;
 
-    @Column(name = "address")
-    private String address;
+  @Column(name = "address")
+  private String address;
 
-    @Column(name = "email", unique = true)
-    private String email;
+  @Column(name = "email", unique = true)
+  private String email;
 
-    @Column(name = "password")
-    private String password;
+  @Column(name = "password")
+  private String password;
 
-    @Column(name = "phone_number")
-    private String phoneNumber;
+  @Column(name = "phone_number")
+  private String phoneNumber;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    private Role role;
+  @Enumerated(EnumType.STRING)
+  @Column(name = "role")
+  private Role role;
 
-    @CreatedDate
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+  @CreatedDate
+  @Column(name = "created_at")
+  private LocalDateTime createdAt;
 
-    @LastModifiedDate
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+  @LastModifiedDate
+  @Column(name = "updated_at")
+  private LocalDateTime updatedAt;
 }

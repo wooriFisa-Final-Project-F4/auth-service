@@ -1,6 +1,11 @@
 package f4.auth.domain.user.dto.request;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.Email;
 
@@ -11,7 +16,6 @@ import javax.validation.constraints.Email;
 @AllArgsConstructor
 public class LoginRequestDto {
 
-    @Email
-    private String email;
-    private String password;
+  @Email private String email;
+  private String password;
 }

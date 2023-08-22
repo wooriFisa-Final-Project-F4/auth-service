@@ -7,7 +7,11 @@ import f4.auth.global.constant.CustomErrorCode;
 import f4.auth.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
@@ -17,23 +21,25 @@ import javax.validation.Valid;
 @RequestMapping("/auth/v1")
 public class MemberController {
 
-    private final MemberService memberService;
-    private final MemberRepository memberRepository;
+  private final MemberService memberService;
+  private final MemberRepository memberRepository;
 
-    @GetMapping("/health-check")
-    public String status() {
-        return "It's Working in Auth-Service";
-    }
+  @GetMapping("/health-check")
+  public String status() {
+    return "It's Working in Auth-Service";
+  }
 
-    @PostMapping("/signup")
-    public String register(@Valid @RequestBody SignupRequestDto signupRequestDto) {
+  @PostMapping("/signup")
+  public String register(@Valid @RequestBody SignupRequestDto signupRequestDto) {
 
-        memberRepository.findByEmail(signupRequestDto.getEmail())
-                .ifPresent(data -> {
-                    throw new CustomException(CustomErrorCode.ALREADY_REGISTERED_MEMBER);
-                });
+    memberRepository
+        .findByEmail(signupRequestDto.getEmail())
+        .ifPresent(
+            data -> {
+              throw new CustomException(CustomErrorCode.ALREADY_REGISTERED_MEMBER);
+            });
 
-        memberService.register(signupRequestDto);
-        return "회원 가입에 성공하셨습니다.";
-    }
+    memberService.register(signupRequestDto);
+    return "회원 가입에 성공하셨습니다.";
+  }
 }
