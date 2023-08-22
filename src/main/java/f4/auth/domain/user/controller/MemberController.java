@@ -30,7 +30,7 @@ public class MemberController {
 
         memberRepository.findByEmail(signupRequestDto.getEmail())
                 .ifPresent(data -> {
-                    throw new CustomException(CustomErrorCode.ALREADY_REGISTERED_USER);
+                    throw new CustomException(CustomErrorCode.ALREADY_REGISTERED_MEMBER);
                 });
 
         memberService.register(signupRequestDto);

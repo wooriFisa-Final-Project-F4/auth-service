@@ -31,4 +31,8 @@ public class Encryptor {
         }
         return builder.toString();
     }
+
+    public boolean matchers(String plain, String encrypted) {
+        return encrypt(plain).equals(encrypted);
+    }
 }
