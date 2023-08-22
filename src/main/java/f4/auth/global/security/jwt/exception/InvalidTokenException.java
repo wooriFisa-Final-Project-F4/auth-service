@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class InvalidTokenException extends CustomException {
 
-    public InvalidTokenException(CustomErrorCode customErrorCode) {
-        super(customErrorCode);
-    }
+  public InvalidTokenException(CustomErrorCode customErrorCode) {
+    super(customErrorCode);
+  }
 }
