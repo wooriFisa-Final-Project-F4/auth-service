@@ -22,8 +22,8 @@ public enum CustomErrorCode {
   // Forbidden 402
 
   // Not Found 404
-  NOT_FOUND_MEMBER("/user/v1/login", 404, "해당 회원을 찾을 수 없습니다.");
-
+  NOT_FOUND_MEMBER("/user/v1/login", 404, "해당 회원을 찾을 수 없습니다."),
+  ALREADY_USER_LOGOUT("/user/v1/logout", 404, "이미 로그아웃한 유저입니다.");
   private final String path;
   private final int code;
   private final String message;
