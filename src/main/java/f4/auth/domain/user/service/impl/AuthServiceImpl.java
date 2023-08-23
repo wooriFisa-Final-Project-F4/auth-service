@@ -12,6 +12,8 @@ import f4.auth.global.redis.RedisService;
 import f4.auth.global.security.jwt.JwtTokenProvider;
 import f4.auth.global.security.jwt.JwtValidateService;
 import f4.auth.global.utils.Encryptor;
+import io.jsonwebtoken.Claims;
+import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,9 +33,6 @@ public class AuthServiceImpl implements AuthService {
   private final Encryptor encryptor;
   private final ModelMapper modelMapper;
 
-  @Value("${jwt.token.access-expiration-time}")
-  private Long atkDuration;
-
   @Value("${jwt.token.refresh-expiration-time}")
   private Long rtkDuration;
 
@@ -48,6 +47,7 @@ public class AuthServiceImpl implements AuthService {
     if (!encryptor.matchers(loginDto.getPassword(), member.getPassword())) {
       throw new CustomException(CustomErrorCode.NOT_VALID_LOGIN_PASSWORD);
     }
+
     CreateTokenDto createTokenDto = modelMapper.map(member, CreateTokenDto.class);
 
     final String atk = jwtTokenProvider.createAccessToken(createTokenDto);
@@ -71,5 +71,19 @@ public class AuthServiceImpl implements AuthService {
         .accessToken(
             jwtTokenProvider.createAccessToken(modelMapper.map(member, CreateTokenDto.class)))
         .build();
+  }
+
+  @Override
+  @Transactional
+  public void logout(String accessToken) {
+    Claims claims = jwtTokenProvider.extractAllClaims(accessToken);
+    Member member = memberRepository.findByEmail(claims.get("email", String.class))
+        .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_MEMBER));
+
+    long remainTime =
+        jwtTokenProvider.getExpiredTime(accessToken).getTime() - new Date().getTime();
+
+    redisService.setBlackList(accessToken, Duration.ofMillis(remainTime));
+    redisService.deleteData(member.getEmail());
   }
 }

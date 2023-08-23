@@ -93,7 +93,7 @@ public class JwtTokenProvider {
   }
 
   public Claims extractAllClaims(String token) {
-    if(!validateToken(token)){
+    if(validateToken(token)){
       throw new CustomException(CustomErrorCode.EMPTY_ACCESS_TOKEN);
     }
 
