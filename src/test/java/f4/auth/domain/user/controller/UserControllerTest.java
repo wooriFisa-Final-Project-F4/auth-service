@@ -44,14 +44,12 @@ class UserControllerTest {
     @MockBean
     private UserService userService;
 
-    @Autowired
-
     private MockMvc mockMvc;
 
 
     @BeforeEach
     public void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(new UserController(userService, userRepository))
+        mockMvc = MockMvcBuilders.standaloneSetup(new UserController(userService))
                 .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
     }

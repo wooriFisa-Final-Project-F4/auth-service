@@ -1,6 +1,7 @@
 package f4.auth.domain.user.controller;
 
 import f4.auth.domain.user.dto.request.SignupRequestDto;
+import f4.auth.domain.user.persist.repository.UserRepository;
 import f4.auth.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
