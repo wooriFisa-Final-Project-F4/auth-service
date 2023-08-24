@@ -22,7 +22,7 @@ public enum CustomErrorCode {
   // Forbidden 402
 
   // Not Found 404
-  NOT_FOUND_MEMBER("/user/v1/login", 404, "해당 회원을 찾을 수 없습니다.");
+  NOT_FOUND_USER("/user/v1/login", 404, "해당 회원을 찾을 수 없습니다.");
 
   private final String path;
   private final int code;

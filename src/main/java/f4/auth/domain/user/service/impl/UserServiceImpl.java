@@ -1,24 +1,26 @@
 package f4.auth.domain.user.service.impl;
 
+import static f4.auth.domain.user.constant.Role.USER;
+
 import f4.auth.domain.user.dto.request.SignupRequestDto;
+import f4.auth.domain.user.dto.response.MailingResponseDto;
 import f4.auth.domain.user.persist.entity.User;
 import f4.auth.domain.user.persist.repository.UserRepository;
 import f4.auth.domain.user.service.UserService;
 import f4.auth.global.constant.CustomErrorCode;
 import f4.auth.global.exception.CustomException;
 import f4.auth.global.utils.Encryptor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
-
-import static f4.auth.domain.user.constant.Role.USER;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
+  private final ModelMapper modelMapper;
   private final Encryptor crypto;
 
   @Override
@@ -51,4 +53,14 @@ public class UserServiceImpl implements UserService {
               throw new CustomException(CustomErrorCode.ALREADY_REGISTERED_MEMBER);
             });
   }
+
+  @Override
+  public MailingResponseDto getUserByUserIdForMailing(Long userId) {
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_USER));
+
+    return modelMapper.map(user, MailingResponseDto.class);
+  }
 }
+
+
