@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -24,11 +23,11 @@ public class UserController {
   private final UserService userService;
 
   /*
-  * @date : 2023.08.22
-  * @author : yuki
-  * @param : RequestDto
-  * @description : 회원 등록
-  */
+   * @date : 2023.08.22
+   * @author : yuki
+   * @param : RequestDto
+   * @description : 회원 등록
+   */
   @PostMapping("/signup")
   public ResponseEntity<?> register(@Valid @RequestBody SignupRequestDto signupRequestDto) {
     userService.register(signupRequestDto);

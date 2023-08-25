@@ -4,6 +4,7 @@ import static f4.auth.domain.user.constant.Role.USER;
 
 import f4.auth.domain.user.dto.request.SignupRequestDto;
 import f4.auth.domain.user.dto.response.MailingResponseDto;
+import f4.auth.domain.user.dto.response.UserResponseDto;
 import f4.auth.domain.user.persist.entity.User;
 import f4.auth.domain.user.persist.repository.UserRepository;
 import f4.auth.domain.user.service.UserService;
@@ -11,8 +12,13 @@ import f4.auth.global.constant.CustomErrorCode;
 import f4.auth.global.exception.CustomException;
 import f4.auth.global.utils.Encryptor;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,6 +28,7 @@ public class UserServiceImpl implements UserService {
   private final UserRepository userRepository;
   private final ModelMapper modelMapper;
   private final Encryptor crypto;
+  private static final int PAGE_SIZE = 10;
 
   @Override
   public void register(SignupRequestDto signupRequestDto) {
@@ -60,6 +67,14 @@ public class UserServiceImpl implements UserService {
         .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_USER));
 
     return modelMapper.map(user, MailingResponseDto.class);
+  }
+
+  @Override
+  public List<UserResponseDto> getUsers(int pageNo, String criteria) {
+    Pageable pageable = PageRequest.of(pageNo - 1, PAGE_SIZE, Sort.by(Direction.ASC, criteria));
+
+    return userRepository.findAll(pageable).getContent().stream().map(UserResponseDto::toDto)
+        .toList();
   }
 }
 
