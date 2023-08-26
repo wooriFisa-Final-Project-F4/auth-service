@@ -2,10 +2,7 @@ package f4.auth.domain.user.controller;
 
 import f4.auth.domain.user.dto.request.SignupRequestDto;
 import f4.auth.domain.user.dto.response.MailingResponseDto;
-import f4.auth.domain.user.dto.response.UserResponseDto;
 import f4.auth.domain.user.service.UserService;
-import java.util.HashMap;
-import java.util.Map;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,11 +42,7 @@ public class UserController {
    */
   @GetMapping("/detail/{userId}")
   public ResponseEntity<?> getUserByUserId(@PathVariable("userId") Long userId) {
-    UserResponseDto response = userService.getUser(userId);
-    Map<String, Object> data = new HashMap<>();
-    data.put("data", response);
-
-    return ResponseEntity.ok(data);
+    return ResponseEntity.ok(userService.getUser(userId));
   }
 
   /*
