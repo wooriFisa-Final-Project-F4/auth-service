@@ -35,10 +35,21 @@ public class UserController {
   }
 
   /*
+  * @date : 2023.08.26
+  * @author : yuki
+  * @param : userId
+  * @description : 회원 상세 정보
+  */
+  @GetMapping("/detail/{userId}")
+  public ResponseEntity<?> getUserByUserId(@PathVariable("userId") Long userId){
+    return ResponseEntity.ok(userService.getUser(userId));
+  }
+
+  /*
    * @date : 2023.08.24
    * @author : yuki
    * @param : userId
-   * @description : email-service 해당 유저의 이메일 정보 조회
+   * @description : email-service 해당 id 유저의 이메일 정보 조회
    * */
   @GetMapping("/email/{userId}")
   public MailingResponseDto getUserByUserIdForMailing(@PathVariable("userId") Long userId) {
