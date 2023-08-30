@@ -1,13 +1,7 @@
 package f4.auth.domain.user.persist.entity;
 
 import f4.auth.domain.user.constant.Role;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -15,14 +9,22 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.time.LocalDateTime;
+import javax.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
-public class User{
+@Table(name = "users")
+public class Users{
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,12 +55,14 @@ public class User{
   @Column(name = "role")
   private Role role;
 
+  @Column(name = "account_number", nullable = true)
+  private String accountNumber;
+
   @CreatedDate
   @Column(name = "created_at")
   private LocalDateTime createdAt;
 
   @LastModifiedDate
-  @Column(name = "updated_at")
+  @Column(name = "updated_at", nullable = true)
   private LocalDateTime updatedAt;
-
 }

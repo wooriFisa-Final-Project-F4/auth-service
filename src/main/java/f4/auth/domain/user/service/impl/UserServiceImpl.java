@@ -5,7 +5,7 @@ import static f4.auth.domain.user.constant.Role.USER;
 import f4.auth.domain.user.dto.request.SignupRequestDto;
 import f4.auth.domain.user.dto.response.MailingResponseDto;
 import f4.auth.domain.user.dto.response.UserResponseDto;
-import f4.auth.domain.user.persist.entity.User;
+import f4.auth.domain.user.persist.entity.Users;
 import f4.auth.domain.user.persist.repository.UserRepository;
 import f4.auth.domain.user.service.UserService;
 import f4.auth.global.constant.CustomErrorCode;
@@ -36,9 +36,9 @@ public class UserServiceImpl implements UserService {
     userRepository.save(getBuild(signupRequestDto));
   }
 
-  private User getBuild(SignupRequestDto signupRequestDto) {
+  private Users getBuild(SignupRequestDto signupRequestDto) {
     String encryptPassword = crypto.encrypt(signupRequestDto.getPassword());
-    return User.builder()
+    return Users.builder()
         .username(signupRequestDto.getUsername())
         .gender(signupRequestDto.getGender())
         .birth(signupRequestDto.getBirth())
@@ -64,19 +64,19 @@ public class UserServiceImpl implements UserService {
   // userId로 유저 정보 조회
   @Override
   public UserResponseDto getUser(Long userId) {
-    User user = getUserFindById(userId);
+    Users user = getUserFindById(userId);
     return modelMapper.map(user, UserResponseDto.class);
   }
 
   // mail-service 에서 필요한 정보 userId로 조회
   @Override
   public MailingResponseDto getUserByUserIdForMailing(Long userId) {
-    User user = getUserFindById(userId);
+    Users user = getUserFindById(userId);
     return modelMapper.map(user, MailingResponseDto.class);
   }
 
   // admin 유저 전체 정보 조회
-  private User getUserFindById(Long userId) {
+  private Users getUserFindById(Long userId) {
     return userRepository.findById(userId)
         .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_USER));
   }
