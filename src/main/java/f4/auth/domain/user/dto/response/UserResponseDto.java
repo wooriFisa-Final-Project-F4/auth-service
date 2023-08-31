@@ -1,6 +1,6 @@
 package f4.auth.domain.user.dto.response;
 
-import f4.auth.domain.user.persist.entity.Users;
+import f4.auth.domain.user.persist.entity.User;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +23,7 @@ public class UserResponseDto {
   private LocalDateTime createdAt;
   private LocalDateTime updateAt;
 
-  public static UserResponseDto toDto(final Users user) {
+  public static UserResponseDto toDto(final User user) {
     return UserResponseDto.builder()
         .userId(user.getId())
         .username(user.getUsername())
