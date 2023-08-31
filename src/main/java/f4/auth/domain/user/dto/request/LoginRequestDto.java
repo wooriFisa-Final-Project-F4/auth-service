@@ -1,5 +1,6 @@
 package f4.auth.domain.user.dto.request;
 
+import javax.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,10 +13,12 @@ import javax.validation.constraints.Email;
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LoginRequestDto {
 
-  @Email private String email;
+  @Email
+  private String email;
+  @NotBlank
   private String password;
 }
