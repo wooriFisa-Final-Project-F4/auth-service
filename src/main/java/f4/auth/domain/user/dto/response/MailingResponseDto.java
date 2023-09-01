@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MailingResponseDto {
 
+  // todo id값도 같이 반환 요청
   private String username;
   private String email;
 }
