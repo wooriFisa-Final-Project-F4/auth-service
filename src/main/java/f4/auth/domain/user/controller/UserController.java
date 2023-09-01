@@ -55,4 +55,11 @@ public class UserController {
   public MailingResponseDto getUserByUserIdForMailing(@PathVariable("userId") Long userId) {
     return userService.getUserByUserIdForMailing(userId);
   }
+
+  /* todo findById boolean으로
+  * @date
+  * @author
+  * @param
+  * @description
+  */
 }

@@ -1,4 +1,4 @@
-package f4.auth.global.service;
+package f4.auth.global.redis;
 
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
