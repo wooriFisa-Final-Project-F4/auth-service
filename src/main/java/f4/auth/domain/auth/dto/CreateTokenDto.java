@@ -1,4 +1,4 @@
-package f4.auth.domain.auth.dtto;
+package f4.auth.domain.auth.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
