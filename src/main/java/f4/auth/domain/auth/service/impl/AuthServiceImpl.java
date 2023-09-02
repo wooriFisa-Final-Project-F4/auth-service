@@ -46,7 +46,7 @@ public class AuthServiceImpl implements AuthService {
     final String atk = jwtTokenProvider.createAccessToken(createTokenDto);
     final String rtk = jwtTokenProvider.createRefreshToken(createTokenDto);
 
-    redisService.setDataExpire(loginRequestDto.getEmail(), rtk, Duration.ofMillis(rtkDuration));
+    redisService.setDataExpire(createTokenDto.getEmail(), rtk, Duration.ofMillis(rtkDuration));
 
     return TokenResponseDto.builder()
         .accessToken(atk)

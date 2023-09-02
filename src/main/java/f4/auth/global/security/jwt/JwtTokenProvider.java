@@ -1,7 +1,6 @@
 package f4.auth.global.security.jwt;
 
 import f4.auth.domain.auth.dtto.CreateTokenDto;
-import f4.auth.global.redis.RedisService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -9,14 +8,14 @@ import io.jsonwebtoken.security.Keys;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
 @Component
 @RequiredArgsConstructor
 public class JwtTokenProvider {
-
-  private final RedisService redisService;
 
   @Value("${jwt.secret}")
   private String SECRET_KEY;
@@ -36,17 +35,9 @@ public class JwtTokenProvider {
   }
 
   public String createAccessToken(CreateTokenDto createTokenDto) {
-    return createToken(createTokenDto, atkDuration);
-  }
-
-  public String createRefreshToken(CreateTokenDto createTokenDto) {
-    return createToken(createTokenDto, rtkDuration);
-  }
-
-  private String createToken(CreateTokenDto createTokenDto, long time) {
     Claims claims = Jwts.claims();
-    claims.put("userId", createTokenDto.getId());
-    claims.put("Role", createTokenDto.getRole());
+    claims.put("user_id", createTokenDto.getId());
+    claims.put("role", createTokenDto.getRole());
 
     Date now = new Date();
 
@@ -54,7 +45,23 @@ public class JwtTokenProvider {
         .setHeaderParam("typ", "JWT")
         .setClaims(claims)
         .setIssuedAt(now)
-        .setExpiration(new Date(now.getTime() + time))
+        .setExpiration(new Date(now.getTime() + atkDuration))
+        .signWith(getSigningKey(SECRET_KEY), SignatureAlgorithm.HS512)
+        .compact();
+  }
+
+  public String createRefreshToken(CreateTokenDto createTokenDto) {
+    Claims claims = Jwts.claims();
+    claims.put("value", UUID.randomUUID());
+
+    Date now = new Date();
+
+    return Jwts.builder()
+        .setHeaderParam("typ", "rtk")
+        .setClaims(claims)
+        .setSubject(createTokenDto.getEmail())
+        .setIssuedAt(now)
+        .setExpiration(new Date(now.getTime() + rtkDuration))
         .signWith(getSigningKey(SECRET_KEY), SignatureAlgorithm.HS512)
         .compact();
   }

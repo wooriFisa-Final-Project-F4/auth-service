@@ -16,6 +16,7 @@ public class CreateTokenDto {
 
   private Long id;
   private String role;
+  private String email;
 }
 
 
