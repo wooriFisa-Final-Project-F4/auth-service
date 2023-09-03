@@ -4,7 +4,6 @@ import f4.auth.domain.user.dto.request.SignupRequestDto;
 import f4.auth.domain.user.dto.response.MailingResponseDto;
 import f4.auth.domain.user.dto.response.UserResponseDto;
 import java.util.List;
-import org.springframework.http.ResponseEntity;
 
 public interface UserService {
 
