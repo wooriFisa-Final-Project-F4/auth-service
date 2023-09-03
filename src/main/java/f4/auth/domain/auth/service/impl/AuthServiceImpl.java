@@ -11,7 +11,9 @@ import f4.auth.global.exception.CustomException;
 import f4.auth.global.redis.RedisService;
 import f4.auth.global.security.jwt.JwtTokenProvider;
 import f4.auth.global.utils.Encryptor;
+import io.jsonwebtoken.Claims;
 import java.time.Duration;
+import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -70,11 +72,30 @@ public class AuthServiceImpl implements AuthService {
     return TokenResponseDto.builder()
         .accessToken(atk)
         .build();
-
   }
 
   private User loadByEmail(String loginRequestDto) {
     return userRepository.findByEmail(loginRequestDto)
         .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_USER));
+  }
+
+  @Override
+  public void logout(String accessToken) {
+    accessToken = jwtTokenProvider.parseToken(accessToken);
+    Claims claims = jwtTokenProvider.extractAllClaims(accessToken);
+
+    String email = claims.getSubject();
+    Date expired = claims.getExpiration();
+
+    if (!redisService.hasBlackList(email) && expired.after(new Date())) {
+      throw new CustomException(CustomErrorCode.ALREADY_LOGOUT_USER);
+    }
+
+    redisService.setBlackList(email, Duration.ofMillis(getExpiration(expired)));
+  }
+
+  private Long getExpiration (Date expired){
+      Long now = new Date().getTime();
+      return expired.getTime() - now;
   }
 }

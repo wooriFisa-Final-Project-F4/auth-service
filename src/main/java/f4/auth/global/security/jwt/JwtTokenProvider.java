@@ -33,6 +33,9 @@ public class JwtTokenProvider {
   @Value("${jwt.token.refresh-token-duration}")
   private Long rtkDuration;
 
+  @Value("${jwt.prefix}")
+  private String prefix;
+
   private Key getSigningKey(String secretKey) {
     byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
     return Keys.hmacShaKeyFor(keyBytes);
@@ -71,6 +74,13 @@ public class JwtTokenProvider {
         .compact();
   }
 
+  public String parseToken(String bearerToken) {
+    if (bearerToken != null && bearerToken.startsWith(prefix)) {
+      return bearerToken.replace(prefix, "");
+    }
+    return null;
+  }
+
   public Claims extractAllClaims(String token) {
     try {
       return Jwts.parserBuilder()
@@ -82,7 +92,7 @@ public class JwtTokenProvider {
       throw new ExpiredTokenException(CustomErrorCode.EXPIRED_ACCESS_TOKEN);
     } catch (InvalidTokenException e) {
       throw new InvalidTokenException(CustomErrorCode.INVALID_ACCESS_TOKEN);
-    } catch(Exception e){
+    } catch (Exception e) {
       throw new CustomException(CustomErrorCode.INVALID_REFRESH_TOKEN);
     }
   }

@@ -14,6 +14,7 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -62,9 +63,11 @@ public class AuthController {
         .body("토큰이 재발행 되었습니다.");
   }
 
-  @GetMapping("/request")
-  public String request(HttpServletRequest request) {
-    return "request 성공 : " + request.getHeader("Authorization") + request.getHeader("Role")
-        + request.getHeader("userId");
+  @PatchMapping("/logout")
+  public ResponseEntity<?> logout(
+      @RequestHeader("Authorization") String accessToken) {
+
+    authService.logout(accessToken);
+    return ResponseEntity.status(HttpStatus.OK).body("로그아웃에 성공하셨습니다.");
   }
 }
