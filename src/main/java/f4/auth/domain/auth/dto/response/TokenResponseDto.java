@@ -1,6 +1,5 @@
 package f4.auth.domain.auth.dto.response;
 
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

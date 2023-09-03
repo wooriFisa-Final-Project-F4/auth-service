@@ -66,19 +66,19 @@ public class UserServiceImpl implements UserService {
   // userId로 유저 정보 조회
   @Override
   public UserResponseDto findByUserId(Long userId) {
-    User user = getUser(userId);
+    User user = loadByUserId(userId);
     return modelMapper.map(user, UserResponseDto.class);
   }
 
   // mail-service 에서 필요한 정보 userId로 조회
   @Override
   public MailingResponseDto findByUserIdForMailing(Long userId) {
-    User user = getUser(userId);
+    User user = loadByUserId(userId);
     return modelMapper.map(user, MailingResponseDto.class);
   }
 
   // admin 유저 전체 정보 조회
-  private User getUser(Long userId) {
+  private User loadByUserId(Long userId) {
     return userRepository.findById(userId)
         .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_USER));
   }
