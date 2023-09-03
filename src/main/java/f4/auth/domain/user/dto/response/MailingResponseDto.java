@@ -1,17 +1,19 @@
 package f4.auth.domain.user.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import java.io.Serializable;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class MailingResponseDto {
+public class MailingResponseDto implements Serializable {
 
-  // todo id값도 같이 반환 요청
+  private Long userId;
   private String username;
   private String email;
 }
