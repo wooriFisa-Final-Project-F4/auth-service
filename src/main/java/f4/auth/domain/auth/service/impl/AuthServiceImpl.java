@@ -39,7 +39,7 @@ public class AuthServiceImpl implements AuthService {
     User user = loadByEmail(loginRequestDto.getEmail());
 
     if (!encryptor.matchers(loginRequestDto.getPassword(), user.getPassword())) {
-      throw new CustomException(CustomErrorCode.NOT_VALID_LOGIN_PASSWORD);
+      throw new CustomException(CustomErrorCode.NOT_VALID_PASSWORD);
     }
 
     CreateTokenDto createTokenDto = modelMapper.map(user, CreateTokenDto.class);
@@ -54,7 +54,6 @@ public class AuthServiceImpl implements AuthService {
         .refreshToken(rtk)
         .build();
   }
-
 
   @Override
   public TokenResponseDto reissue(String refreshToken) {

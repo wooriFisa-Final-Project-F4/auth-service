@@ -6,6 +6,8 @@ import f4.auth.domain.auth.dto.response.TokenResponseDto;
 public interface AuthService {
 
   TokenResponseDto login(LoginRequestDto loginRequestDto);
+
   TokenResponseDto reissue(String refreshToken);
+
   void logout(String accessToken);
 }
