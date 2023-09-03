@@ -31,13 +31,14 @@ public class UserServiceImpl implements UserService {
   private static final int PAGE_SIZE = 10;
 
   @Override
-  public void register(SignupRequestDto signupRequestDto) {
-    loadByUserEmail(signupRequestDto);
-    userRepository.save(getBuild(signupRequestDto));
+  public void save(SignupRequestDto signupRequestDto) {
+    existsByUserEmail(signupRequestDto.getEmail());
+    userRepository.save(getUserBuild(signupRequestDto));
   }
 
-  private User getBuild(SignupRequestDto signupRequestDto) {
+  private User getUserBuild(SignupRequestDto signupRequestDto) {
     String encryptPassword = crypto.encrypt(signupRequestDto.getPassword());
+
     return User.builder()
         .username(signupRequestDto.getUsername())
         .gender(signupRequestDto.getGender())
@@ -52,9 +53,9 @@ public class UserServiceImpl implements UserService {
         .build();
   }
 
-  private void loadByUserEmail(SignupRequestDto signupRequestDto) {
+  private void existsByUserEmail(String email) {
     userRepository
-        .findByEmail(signupRequestDto.getEmail())
+        .findByEmail(email)
         .ifPresent(
             data -> {
               throw new CustomException(CustomErrorCode.ALREADY_REGISTERED_MEMBER);

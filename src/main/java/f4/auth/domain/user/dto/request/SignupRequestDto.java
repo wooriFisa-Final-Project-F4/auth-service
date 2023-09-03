@@ -1,15 +1,14 @@
 package f4.auth.domain.user.dto.request;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
-
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
@@ -22,7 +21,7 @@ public class SignupRequestDto {
   private String username;
 
   @NotBlank(message = "성별은 필수 입력 항목입니다.")
-  @Pattern(regexp = "[MW]")
+  @Pattern(regexp = "[남녀]")
   private String gender;
 
   @NotBlank(message = "생년월일은 필수 입력 항목입니다.")

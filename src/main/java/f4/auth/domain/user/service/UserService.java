@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UserService {
 
-  void register(SignupRequestDto signupRequestDto);
+  void save(SignupRequestDto signupRequestDto);
 
   MailingResponseDto getUserByUserIdForMailing(Long userId);
 

@@ -25,12 +25,13 @@ public class UserController {
   /*
    * @date : 2023.08.22
    * @author : yuki
-   * @param : RequestDto
+   * @param : signupRequestDto(username, gender, birth, address, email, password, phoneNumber)
    * @description : 회원 등록
    */
   @PostMapping("/signup")
-  public ResponseEntity<?> register(@Valid @RequestBody SignupRequestDto signupRequestDto) {
-    userService.register(signupRequestDto);
+  public ResponseEntity<?> save(@Valid @RequestBody SignupRequestDto signupRequestDto) {
+    log.info("회원가입을 수행합니다. 회원 이름 : {}, 이메일 : {}", signupRequestDto.getUsername(), signupRequestDto.getEmail());
+    userService.save(signupRequestDto);
     return ResponseEntity.ok("회원가입에 성공하였습니다.");
   }
 
@@ -57,9 +58,9 @@ public class UserController {
   }
 
   /* todo findById boolean으로
-  * @date
-  * @author
-  * @param
-  * @description
-  */
+   * @date
+   * @author
+   * @param
+   * @description
+   */
 }
