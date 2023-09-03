@@ -1,22 +1,28 @@
 package f4.auth.global.security.jwt;
 
-import f4.auth.domain.auth.dtto.CreateTokenDto;
-import f4.auth.global.redis.RedisService;
+import f4.auth.domain.auth.dto.CreateTokenDto;
+import f4.auth.global.constant.CustomErrorCode;
+import f4.auth.global.exception.CustomException;
+import f4.auth.global.security.jwt.exception.ExpiredTokenException;
+import f4.auth.global.security.jwt.exception.InvalidTokenException;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtTokenProvider {
-
-  private final RedisService redisService;
 
   @Value("${jwt.secret}")
   private String SECRET_KEY;
@@ -27,8 +33,8 @@ public class JwtTokenProvider {
   @Value("${jwt.token.refresh-token-duration}")
   private Long rtkDuration;
 
-  @Value("${jwt.token.header}")
-  private String header;
+  @Value("${jwt.prefix}")
+  private String prefix;
 
   private Key getSigningKey(String secretKey) {
     byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
@@ -36,26 +42,58 @@ public class JwtTokenProvider {
   }
 
   public String createAccessToken(CreateTokenDto createTokenDto) {
-    return createToken(createTokenDto, atkDuration);
-  }
-
-  public String createRefreshToken(CreateTokenDto createTokenDto) {
-    return createToken(createTokenDto, rtkDuration);
-  }
-
-  private String createToken(CreateTokenDto createTokenDto, long time) {
     Claims claims = Jwts.claims();
-    claims.put("userId", createTokenDto.getId());
-    claims.put("Role", createTokenDto.getRole());
+    claims.put("user_id", createTokenDto.getId());
+    claims.put("role", createTokenDto.getRole());
 
     Date now = new Date();
 
     return Jwts.builder()
         .setHeaderParam("typ", "JWT")
         .setClaims(claims)
+        .setSubject(createTokenDto.getEmail())
         .setIssuedAt(now)
-        .setExpiration(new Date(now.getTime() + time))
+        .setExpiration(new Date(now.getTime() + atkDuration))
         .signWith(getSigningKey(SECRET_KEY), SignatureAlgorithm.HS512)
         .compact();
+  }
+
+  public String createRefreshToken(CreateTokenDto createTokenDto) {
+    Claims claims = Jwts.claims();
+    claims.put("value", UUID.randomUUID());
+
+    Date now = new Date();
+
+    return Jwts.builder()
+        .setHeaderParam("typ", "rtk")
+        .setClaims(claims)
+        .setSubject(createTokenDto.getEmail())
+        .setIssuedAt(now)
+        .setExpiration(new Date(now.getTime() + rtkDuration))
+        .signWith(getSigningKey(SECRET_KEY), SignatureAlgorithm.HS512)
+        .compact();
+  }
+
+  public String parseToken(String bearerToken) {
+    if (bearerToken != null && bearerToken.startsWith(prefix)) {
+      return bearerToken.replace(prefix, "");
+    }
+    return null;
+  }
+
+  public Claims extractAllClaims(String token) {
+    try {
+      return Jwts.parserBuilder()
+          .setSigningKey(getSigningKey(SECRET_KEY))
+          .build()
+          .parseClaimsJws(token)
+          .getBody();
+    } catch (ExpiredJwtException e) {
+      throw new ExpiredTokenException(CustomErrorCode.EXPIRED_ACCESS_TOKEN);
+    } catch (InvalidTokenException e) {
+      throw new InvalidTokenException(CustomErrorCode.INVALID_ACCESS_TOKEN);
+    } catch (Exception e) {
+      throw new CustomException(CustomErrorCode.INVALID_REFRESH_TOKEN);
+    }
   }
 }

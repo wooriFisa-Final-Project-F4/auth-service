@@ -1,4 +1,4 @@
-package f4.auth.domain.auth.dtto.request;
+package f4.auth.domain.auth.dto.request;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

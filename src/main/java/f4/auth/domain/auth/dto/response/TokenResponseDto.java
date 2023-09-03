@@ -1,4 +1,4 @@
-package f4.auth.domain.auth.dtto.response;
+package f4.auth.domain.auth.dto.response;
 
 
 import lombok.Builder;
