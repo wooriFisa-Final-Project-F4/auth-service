@@ -31,7 +31,7 @@ public class UserController {
    */
   @PostMapping("/signup")
   public ResponseEntity<?> save(@Valid @RequestBody SignupRequestDto signupRequestDto) {
-    log.info("회원가입을 수행합니다. 회원 이름 : {}, 이메일 : {}", signupRequestDto.getUsername(),
+    log.info("회원가입 수행. 회원 이름 : {}, 이메일 : {}", signupRequestDto.getUsername(),
         signupRequestDto.getEmail());
     userService.save(signupRequestDto);
     return ResponseEntity.ok("회원가입에 성공하였습니다.");
@@ -45,6 +45,7 @@ public class UserController {
    */
   @GetMapping("/detail/{userId}")
   public ResponseEntity<?> findByUserId(@PathVariable("userId") Long userId) {
+    log.info("회원 상세 정보 조회. 회원 아이디 : {}", userId);
     return ResponseEntity.ok(userService.findByUserId(userId));
   }
 
@@ -56,6 +57,7 @@ public class UserController {
    * */
   @GetMapping("/email/{userId}")
   public MailingResponseDto findByUserIdForMailing(@PathVariable("userId") Long userId) {
+    log.info("email-service 유저 정보 조회. 회원 아이디 : {}", userId);
     return userService.findByUserIdForMailing(userId);
   }
 
@@ -67,6 +69,7 @@ public class UserController {
    */
   @GetMapping("/product/{userId}")
   public ProductResponseDto existsByUserId(@PathVariable("userId") Long userId) {
+    log.info("product-service 유저 존재 여부 조회. 회원 아이디 : {}", userId);
     return userService.existsByUserId(userId);
   }
 }
