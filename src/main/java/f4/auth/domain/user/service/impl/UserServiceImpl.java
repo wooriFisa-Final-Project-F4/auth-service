@@ -4,6 +4,7 @@ import static f4.auth.domain.user.constant.Role.USER;
 
 import f4.auth.domain.user.dto.request.SignupRequestDto;
 import f4.auth.domain.user.dto.response.MailingResponseDto;
+import f4.auth.domain.user.dto.response.ProductResponseDto;
 import f4.auth.domain.user.dto.response.UserResponseDto;
 import f4.auth.domain.user.persist.entity.User;
 import f4.auth.domain.user.persist.repository.UserRepository;
@@ -90,6 +91,12 @@ public class UserServiceImpl implements UserService {
         .getContent().stream()
         .map(UserResponseDto::toDto)
         .toList();
+  }
+
+  @Override
+  public ProductResponseDto existsByUserId(Long userId) {
+    boolean isExisted = userRepository.existsById(userId);
+    return new ProductResponseDto(isExisted);
   }
 }
 

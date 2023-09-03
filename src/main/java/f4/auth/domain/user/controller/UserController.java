@@ -2,6 +2,7 @@ package f4.auth.domain.user.controller;
 
 import f4.auth.domain.user.dto.request.SignupRequestDto;
 import f4.auth.domain.user.dto.response.MailingResponseDto;
+import f4.auth.domain.user.dto.response.ProductResponseDto;
 import f4.auth.domain.user.service.UserService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,8 @@ public class UserController {
    */
   @PostMapping("/signup")
   public ResponseEntity<?> save(@Valid @RequestBody SignupRequestDto signupRequestDto) {
-    log.info("회원가입을 수행합니다. 회원 이름 : {}, 이메일 : {}", signupRequestDto.getUsername(), signupRequestDto.getEmail());
+    log.info("회원가입을 수행합니다. 회원 이름 : {}, 이메일 : {}", signupRequestDto.getUsername(),
+        signupRequestDto.getEmail());
     userService.save(signupRequestDto);
     return ResponseEntity.ok("회원가입에 성공하였습니다.");
   }
@@ -58,9 +60,13 @@ public class UserController {
   }
 
   /* todo findById boolean으로
-   * @date
-   * @author
-   * @param
-   * @description
+   * @date : 2023.09.03
+   * @author : yuki
+   * @param : userId
+   * @description : product-service 해당 id 유저 존재 여부 조회
    */
+  @GetMapping("/product/{userId}")
+  public ProductResponseDto existsByUserId(@PathVariable("userId") Long userId) {
+    return userService.existsByUserId(userId);
+  }
 }
