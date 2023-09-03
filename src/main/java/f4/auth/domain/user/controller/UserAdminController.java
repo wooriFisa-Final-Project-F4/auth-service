@@ -31,7 +31,7 @@ public class UserAdminController {
    * @description : 유저 전체 조회 - 페이징
    */
   @GetMapping("/findAll")
-  public ResponseEntity<?> getUsers(
+  public ResponseEntity<?> findAll(
       @RequestParam(required = false, defaultValue = "1", value = "page") int pageNo,
       @RequestParam(required = false, defaultValue = "username", value = "criteria") String criteria,
       @RequestHeader("role") String role
@@ -42,6 +42,6 @@ public class UserAdminController {
       throw new CustomException(CustomErrorCode.NOT_VALID_ROLE);
     }
 
-    return ResponseEntity.ok(userService.getUsers(pageNo, criteria));
+    return ResponseEntity.ok(userService.findAll(pageNo, criteria));
   }
 }

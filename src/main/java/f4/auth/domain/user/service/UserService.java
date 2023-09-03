@@ -9,9 +9,10 @@ public interface UserService {
 
   void save(SignupRequestDto signupRequestDto);
 
-  MailingResponseDto getUserByUserIdForMailing(Long userId);
+  UserResponseDto findByUserId(Long userId);
 
-  UserResponseDto getUser(Long userId);
+  MailingResponseDto findByUserIdForMailing(Long userId);
 
-  List<UserResponseDto> getUsers(int pageNo, String criteria);
+  List<UserResponseDto> findAll(int pageNo, String criteria);
+
 }

@@ -42,8 +42,8 @@ public class UserController {
    * @description : 회원 상세 정보
    */
   @GetMapping("/detail/{userId}")
-  public ResponseEntity<?> getUserByUserId(@PathVariable("userId") Long userId) {
-    return ResponseEntity.ok(userService.getUser(userId));
+  public ResponseEntity<?> findByUserId(@PathVariable("userId") Long userId) {
+    return ResponseEntity.ok(userService.findByUserId(userId));
   }
 
   /*
@@ -53,8 +53,8 @@ public class UserController {
    * @description : email-service 해당 id 유저의 이메일 정보 조회
    * */
   @GetMapping("/email/{userId}")
-  public MailingResponseDto getUserByUserIdForMailing(@PathVariable("userId") Long userId) {
-    return userService.getUserByUserIdForMailing(userId);
+  public MailingResponseDto findByUserIdForMailing(@PathVariable("userId") Long userId) {
+    return userService.findByUserIdForMailing(userId);
   }
 
   /* todo findById boolean으로
