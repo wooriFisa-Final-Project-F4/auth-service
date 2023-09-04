@@ -43,7 +43,7 @@ public class JwtTokenProvider {
 
   public String createAccessToken(CreateTokenDto createTokenDto) {
     Claims claims = Jwts.claims();
-    claims.put("user_id", createTokenDto.getId());
+    claims.put("userId", createTokenDto.getId());
     claims.put("role", createTokenDto.getRole());
 
     Date now = new Date();
