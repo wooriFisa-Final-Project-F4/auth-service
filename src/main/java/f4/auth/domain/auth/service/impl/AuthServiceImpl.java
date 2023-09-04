@@ -104,13 +104,13 @@ public class AuthServiceImpl implements AuthService {
   public void emailCertification(CertificationRequestDto certificationRequestDto) {
 
     if (!redisService.hasBlackList(certificationRequestDto.getEmail())) {
-      throw new CustomException(CustomErrorCode.TIMEOUT_CIRTIFICATION_NUMBER);
+      throw new CustomException(CustomErrorCode.TIMEOUT_CERTIFICATION_NUMBER);
     }
 
     String certificationNumber = redisService.getData(certificationRequestDto.getEmail());
 
     if (!certificationNumber.equals(certificationRequestDto.getCertificationNumber())) {
-      throw new CustomException(CustomErrorCode.INCORECT_CIRTIFICATION_NUMBER);
+      throw new CustomException(CustomErrorCode.INCORRECT_CERTIFICATION_NUMBER);
     }
   }
 }
