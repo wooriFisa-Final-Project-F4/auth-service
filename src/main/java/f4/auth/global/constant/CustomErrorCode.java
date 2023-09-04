@@ -14,6 +14,8 @@ public enum CustomErrorCode {
   ALREADY_LOGOUT_USER("/auth/v1/token/reissue", 400, "이미 로그아웃된 유저입니다."),
   NOT_EXIST_ROLE("/admin/..", 400, "해당 역할은 존재하지 않습니다."),
   NOT_VALID_ROLE("/admin/..", 400, "해당 API를 호출하기에 적합하지 않은 역할입니다."),
+  INCORECT_CIRTIFICATION_NUMBER("/auth/v1/email/certification", 400, "인증번호가 틀렸습니다."),
+  TIMEOUT_CIRTIFICATION_NUMBER("/auth/v1/email/certification", 400, "인증번호 입력 시간이 초과했습니다."),
 
   // Unathorized 401
   INVALID_ACCESS_TOKEN("/auth/v1/login", 401, "잘못된 토큰 입니다"),

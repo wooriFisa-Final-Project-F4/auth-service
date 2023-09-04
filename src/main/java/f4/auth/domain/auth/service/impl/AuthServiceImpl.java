@@ -1,6 +1,7 @@
 package f4.auth.domain.auth.service.impl;
 
 import f4.auth.domain.auth.dto.CreateTokenDto;
+import f4.auth.domain.auth.dto.request.CertificationRequestDto;
 import f4.auth.domain.auth.dto.request.LoginRequestDto;
 import f4.auth.domain.auth.dto.response.TokenResponseDto;
 import f4.auth.domain.auth.service.AuthService;
@@ -93,8 +94,22 @@ public class AuthServiceImpl implements AuthService {
     redisService.setBlackList(email, Duration.ofMillis(getExpiration(expired)));
   }
 
-  private Long getExpiration (Date expired){
-      Long now = new Date().getTime();
-      return expired.getTime() - now;
+  private Long getExpiration(Date expired) {
+    Long now = new Date().getTime();
+    return expired.getTime() - now;
+  }
+
+  @Override
+  public void emailCertification(CertificationRequestDto certificationRequestDto) {
+
+    if (!redisService.hasBlackList(certificationRequestDto.getEmail())) {
+      throw new CustomException(CustomErrorCode.TIMEOUT_CIRTIFICATION_NUMBER);
+    }
+
+    String certificationNumber = redisService.getData(certificationRequestDto.getEmail());
+
+    if (!certificationNumber.equals(certificationRequestDto.getCertificationNumber())) {
+      throw new CustomException(CustomErrorCode.INCORECT_CIRTIFICATION_NUMBER);
+    }
   }
 }
