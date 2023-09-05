@@ -2,7 +2,7 @@ package f4.auth.domain.user.controller;
 
 import f4.auth.domain.user.dto.request.LinkRequestDto;
 import f4.auth.domain.user.dto.request.SignupRequestDto;
-import f4.auth.domain.user.dto.response.MailingResponseDto;
+import f4.auth.domain.user.service.feign.dto.response.UserCheckResponseDto;
 import f4.auth.domain.user.dto.response.ProductResponseDto;
 import f4.auth.domain.user.service.UserService;
 import javax.validation.Valid;
@@ -57,10 +57,10 @@ public class UserController {
    * @param : userId
    * @description : email-service 해당 id 유저의 이메일 정보 조회
    * */
-  @GetMapping("/email/{userId}")
-  public MailingResponseDto findByUserIdForMailing(@PathVariable("userId") Long userId) {
+  @GetMapping("/feign/{userId}")
+  public UserCheckResponseDto findByUserIdForOtherService(@PathVariable("userId") Long userId) {
     log.info("email-service 유저 정보 조회. 회원 아이디 : {}", userId);
-    return userService.findByUserIdForMailing(userId);
+    return userService.findByUserIdForOtherService(userId);
   }
 
   /*

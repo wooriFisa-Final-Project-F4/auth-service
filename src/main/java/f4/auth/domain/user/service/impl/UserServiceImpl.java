@@ -7,7 +7,7 @@ import f4.auth.domain.user.constant.ApiStatus;
 import f4.auth.domain.user.dto.request.LinkRequestDto;
 import f4.auth.domain.user.dto.request.SignupRequestDto;
 import f4.auth.domain.user.dto.response.LinkingResponseDto;
-import f4.auth.domain.user.dto.response.MailingResponseDto;
+import f4.auth.domain.user.service.feign.dto.response.UserCheckResponseDto;
 import f4.auth.domain.user.dto.response.ProductResponseDto;
 import f4.auth.domain.user.dto.response.UserResponseDto;
 import f4.auth.domain.user.persist.entity.User;
@@ -87,9 +87,9 @@ public class UserServiceImpl implements UserService {
 
   // mail-service 에서 필요한 정보 userId로 조회
   @Override
-  public MailingResponseDto findByUserIdForMailing(Long userId) {
+  public UserCheckResponseDto findByUserIdForOtherService(Long userId) {
     User user = loadByUserId(userId);
-    return modelMapper.map(user, MailingResponseDto.class);
+    return modelMapper.map(user, UserCheckResponseDto.class);
   }
 
   // admin 유저 전체 정보 조회
