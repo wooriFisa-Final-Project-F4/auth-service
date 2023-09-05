@@ -33,4 +33,16 @@ public class GlobalExceptionHandler {
         ErrorDetails.builder().code(500).message("암호화를 수행할 수 없습니다.").build(),
         HttpStatus.INTERNAL_SERVER_ERROR);
   }
+
+  @ExceptionHandler(FeignException.class)
+  public ResponseEntity<?> feignExceptionHandler(FeignException e) {
+    log.error("ErrorCode : {}, ErrorMessage : {}, detail : {}", 500, e.getMessage(), e.getObject());
+
+    return new ResponseEntity<>(
+        ErrorDetails.builder()
+            .code(500)
+            .message((String) e.getObject().toString())
+            .build()
+        , HttpStatus.BAD_REQUEST);
+  }
 }
