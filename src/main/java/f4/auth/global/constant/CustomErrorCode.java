@@ -16,6 +16,7 @@ public enum CustomErrorCode {
   NOT_VALID_ROLE(400, "해당 API를 호출하기에 적합하지 않은 역할입니다."),
   INCORRECT_CERTIFICATION_NUMBER(400, "인증번호가 틀렸습니다."),
   TIMEOUT_CERTIFICATION_NUMBER(400, "인증번호 입력 시간이 초과했습니다."),
+  ALREADY_LINKED_ACCOUNT(400, "이미 계좌가 연동되어 있습니다."),
 
   // Unathorized 401
   INVALID_ACCESS_TOKEN(401, "잘못된 토큰 입니다"),
