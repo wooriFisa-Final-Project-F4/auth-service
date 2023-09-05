@@ -1,7 +1,9 @@
 package f4.auth.domain.user.service.impl;
 
+import static f4.auth.domain.user.constant.ApiStatus.SUCCESS;
 import static f4.auth.domain.user.constant.Role.USER;
 
+import f4.auth.domain.user.constant.ApiStatus;
 import f4.auth.domain.user.dto.request.LinkRequestDto;
 import f4.auth.domain.user.dto.request.SignupRequestDto;
 import f4.auth.domain.user.dto.response.LinkingResponseDto;
@@ -12,15 +14,19 @@ import f4.auth.domain.user.persist.entity.User;
 import f4.auth.domain.user.persist.repository.UserRepository;
 import f4.auth.domain.user.service.UserService;
 import f4.auth.domain.user.service.feign.WooriMockServiceApi;
+import f4.auth.domain.user.service.feign.dto.request.CheckBalanceRequestDto;
 import f4.auth.domain.user.service.feign.dto.request.LinkingRequestDto;
 import f4.auth.domain.user.service.feign.dto.response.ApiResponse;
+import f4.auth.domain.user.service.feign.dto.response.CheckBalanceResponseDto;
 import f4.auth.global.constant.CustomErrorCode;
 import f4.auth.global.exception.CustomException;
+import f4.auth.global.exception.FeignException;
 import f4.auth.global.utils.Encryptor;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +35,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -117,7 +124,11 @@ public class UserServiceImpl implements UserService {
     }
 
     LinkingRequestDto linkingRequestDto = loadByLinkingRequest(userId, linkRequestDto);
-    ApiResponse response = wooriMockServiceApi.linkingAccount(linkingRequestDto);
+    ApiResponse<?> response = wooriMockServiceApi.linkingAccount(linkingRequestDto);
+
+    if (SUCCESS != ApiStatus.of(response.getStatus())) {
+      throw new FeignException(response.getError());
+    }
 
     LinkingResponseDto linkingResponseDto = modelMapper.map(response.getData(),
         LinkingResponseDto.class);
@@ -126,6 +137,35 @@ public class UserServiceImpl implements UserService {
     return linkingResponseDto;
   }
 
+  @Override
+  public CheckBalanceResponseDto checkBalance(Long userId) {
+    User user = loadByUserId(userId);
+
+    if (user.getAccountNumber().isBlank()) {
+      throw new CustomException(CustomErrorCode.NOT_LIKED_ACCOUNT);
+    }
+
+    CheckBalanceRequestDto request = standByCheckBalanceRequestDto(userId, user);
+    request.setArteUserId(40L);
+    ApiResponse<?> response = wooriMockServiceApi.checkBalance(request);
+
+    log.info("status : {}, request id : {}", response.getStatus(), request.getArteUserId());
+    if (SUCCESS != ApiStatus.of(response.getStatus())) {
+      throw new FeignException(response.getError());
+    }
+    if (SUCCESS != ApiStatus.of(response.getStatus())) {
+      throw new FeignException(response.getError());
+    }
+
+    return modelMapper.map(response.getData(), CheckBalanceResponseDto.class);
+  }
+
+  private static CheckBalanceRequestDto standByCheckBalanceRequestDto(Long userId, User user) {
+    return CheckBalanceRequestDto.builder()
+        .arteUserId(userId)
+        .accountNumber(user.getAccountNumber())
+        .build();
+  }
 
   private LinkingRequestDto loadByLinkingRequest(Long userId, LinkRequestDto linkRequestDto) {
     String encrypt = crypto.encrypt(linkRequestDto.getPassword());

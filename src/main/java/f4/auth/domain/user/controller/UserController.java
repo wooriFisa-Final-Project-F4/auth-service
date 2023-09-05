@@ -5,7 +5,6 @@ import f4.auth.domain.user.dto.request.SignupRequestDto;
 import f4.auth.domain.user.dto.response.MailingResponseDto;
 import f4.auth.domain.user.dto.response.ProductResponseDto;
 import f4.auth.domain.user.service.UserService;
-import f4.auth.domain.user.dto.response.LinkingResponseDto;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -76,11 +75,33 @@ public class UserController {
     return userService.existsByUserId(userId);
   }
 
+  /*
+   * @date : 2023.09.05
+   * @author : yuki
+   * @param : @RequestHeader(userId), LinkRequestDto(name, accountNumber, password)
+   * @description :  계좌를 연결하기 위해, Feign 통신하기 위한 LinkingRequestDto로 객체를 만들어 Mock-Api 서버에 요청한다.
+   * */
   @PostMapping("/woori-mock/api/linking")
-  public LinkingResponseDto linkingAccount(
+  public ResponseEntity<?> linkingAccount(
       @RequestHeader("userId") Long userId,
       @Valid @RequestBody LinkRequestDto linkRequestDto) {
-    log.info("Feign 통신을 통해 Aretemoderni Account 연결 수행. Linking");
-    return userService.linkingAccount(userId, linkRequestDto);
+    log.info(
+        "Feign 통신을 통해 Aretemoderni Account 연동 수행. "
+            + "userId : {}, name : {}", userId, linkRequestDto.getName());
+    return ResponseEntity.ok(userService.linkingAccount(userId, linkRequestDto));
+  }
+
+  /*
+   * @date : 2023.09.05
+   * @author : yuki
+   * @param : RequestHeader(userId)
+   * @description : 계좌 잔액 조회를 하기 위해, Feign 통신하기 위한 CheckBalanceRequestDto 객체를 만들어 Mock-Api 서버에 요청한다.
+   */
+  @PostMapping("/woori-mock/api/check/balance")
+  public ResponseEntity<?> checkBalance(
+      @RequestHeader("userId") Long userId
+  ) {
+    log.info("Feign 통신을 통해 계좌 잔액 조회. ");
+    return ResponseEntity.ok(userService.checkBalance(userId));
   }
 }
