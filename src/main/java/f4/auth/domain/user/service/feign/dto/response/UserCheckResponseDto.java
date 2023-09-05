@@ -1,4 +1,4 @@
-package f4.auth.domain.user.dto.response;
+package f4.auth.domain.user.service.feign.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.io.Serializable;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class MailingResponseDto implements Serializable {
+public class UserCheckResponseDto implements Serializable {
 
   private Long userId;
   private String username;

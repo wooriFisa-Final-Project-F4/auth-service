@@ -15,14 +15,12 @@ public class GlobalExceptionHandler {
   @ExceptionHandler({CustomException.class})
   public ResponseEntity<?> customExceptionHandler(CustomException e) {
     log.error(
-        "errorCode: {}, path: {}, message: {}",
+        "errorCode: {}, message: {}",
         e.getCustomErrorCode().getCode(),
-        e.getCustomErrorCode().getPath(),
         e.getCustomErrorCode().getMessage());
 
     return new ResponseEntity<>(
         ErrorDetails.builder()
-            .path(e.getCustomErrorCode().getPath())
             .code(e.getCustomErrorCode().getCode())
             .message(e.getCustomErrorCode().getMessage())
             .build(),
@@ -34,5 +32,17 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>(
         ErrorDetails.builder().code(500).message("암호화를 수행할 수 없습니다.").build(),
         HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  @ExceptionHandler(FeignException.class)
+  public ResponseEntity<?> feignExceptionHandler(FeignException e) {
+    log.error("ErrorCode : {}, ErrorMessage : {}, detail : {}", 500, e.getMessage(), e.getObject());
+
+    return new ResponseEntity<>(
+        ErrorDetails.builder()
+            .code(500)
+            .message((String) e.getObject().toString())
+            .build()
+        , HttpStatus.BAD_REQUEST);
   }
 }

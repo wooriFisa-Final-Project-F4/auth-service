@@ -1,7 +1,8 @@
 package f4.auth.domain.user.controller;
 
+import f4.auth.domain.user.dto.request.LinkRequestDto;
 import f4.auth.domain.user.dto.request.SignupRequestDto;
-import f4.auth.domain.user.dto.response.MailingResponseDto;
+import f4.auth.domain.user.service.feign.dto.response.UserCheckResponseDto;
 import f4.auth.domain.user.dto.response.ProductResponseDto;
 import f4.auth.domain.user.service.UserService;
 import javax.validation.Valid;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -55,13 +57,13 @@ public class UserController {
    * @param : userId
    * @description : email-service 해당 id 유저의 이메일 정보 조회
    * */
-  @GetMapping("/email/{userId}")
-  public MailingResponseDto findByUserIdForMailing(@PathVariable("userId") Long userId) {
+  @GetMapping("/feign/{userId}")
+  public UserCheckResponseDto findByUserIdForOtherService(@PathVariable("userId") Long userId) {
     log.info("email-service 유저 정보 조회. 회원 아이디 : {}", userId);
-    return userService.findByUserIdForMailing(userId);
+    return userService.findByUserIdForOtherService(userId);
   }
 
-  /* todo findById boolean으로
+  /*
    * @date : 2023.09.03
    * @author : yuki
    * @param : userId
@@ -71,5 +73,35 @@ public class UserController {
   public ProductResponseDto existsByUserId(@PathVariable("userId") Long userId) {
     log.info("product-service 유저 존재 여부 조회. 회원 아이디 : {}", userId);
     return userService.existsByUserId(userId);
+  }
+
+  /*
+   * @date : 2023.09.05
+   * @author : yuki
+   * @param : @RequestHeader(userId), LinkRequestDto(name, accountNumber, password)
+   * @description :  계좌를 연결하기 위해, Feign 통신하기 위한 LinkingRequestDto로 객체를 만들어 Mock-Api 서버에 요청한다.
+   * */
+  @PostMapping("/woori-mock/api/linking")
+  public ResponseEntity<?> linkingAccount(
+      @RequestHeader("userId") Long userId,
+      @Valid @RequestBody LinkRequestDto linkRequestDto) {
+    log.info(
+        "Feign 통신을 통해 Aretemoderni Account 연동 수행. "
+            + "userId : {}, name : {}", userId, linkRequestDto.getName());
+    return ResponseEntity.ok(userService.linkingAccount(userId, linkRequestDto));
+  }
+
+  /*
+   * @date : 2023.09.05
+   * @author : yuki
+   * @param : RequestHeader(userId)
+   * @description : 계좌 잔액 조회를 하기 위해, Feign 통신하기 위한 CheckBalanceRequestDto 객체를 만들어 Mock-Api 서버에 요청한다.
+   */
+  @PostMapping("/woori-mock/api/check/balance")
+  public ResponseEntity<?> checkBalance(
+      @RequestHeader("userId") Long userId
+  ) {
+    log.info("Feign 통신을 통해 계좌 잔액 조회. ");
+    return ResponseEntity.ok(userService.checkBalance(userId));
   }
 }

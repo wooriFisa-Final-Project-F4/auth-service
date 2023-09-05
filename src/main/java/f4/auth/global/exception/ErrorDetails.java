@@ -9,7 +9,6 @@ import lombok.Setter;
 @Builder
 public class ErrorDetails {
 
-  private String path;
   private int code;
   private String message;
 }
