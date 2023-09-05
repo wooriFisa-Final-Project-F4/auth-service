@@ -2,24 +2,31 @@ package f4.auth.domain.user.service.impl;
 
 import static f4.auth.domain.user.constant.Role.USER;
 
+import f4.auth.domain.user.dto.request.LinkRequestDto;
 import f4.auth.domain.user.dto.request.SignupRequestDto;
+import f4.auth.domain.user.dto.response.LinkingResponseDto;
 import f4.auth.domain.user.dto.response.MailingResponseDto;
 import f4.auth.domain.user.dto.response.ProductResponseDto;
 import f4.auth.domain.user.dto.response.UserResponseDto;
 import f4.auth.domain.user.persist.entity.User;
 import f4.auth.domain.user.persist.repository.UserRepository;
 import f4.auth.domain.user.service.UserService;
+import f4.auth.domain.user.service.feign.WooriMockServiceApi;
+import f4.auth.domain.user.service.feign.dto.request.LinkingRequestDto;
+import f4.auth.domain.user.service.feign.dto.response.ApiResponse;
 import f4.auth.global.constant.CustomErrorCode;
 import f4.auth.global.exception.CustomException;
 import f4.auth.global.utils.Encryptor;
 import java.time.LocalDateTime;
 import java.util.List;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,6 +36,7 @@ public class UserServiceImpl implements UserService {
   private final UserRepository userRepository;
   private final ModelMapper modelMapper;
   private final Encryptor crypto;
+  private final WooriMockServiceApi wooriMockServiceApi;
   private static final int PAGE_SIZE = 10;
 
   @Override
@@ -97,6 +105,37 @@ public class UserServiceImpl implements UserService {
   public ProductResponseDto existsByUserId(Long userId) {
     boolean isExisted = userRepository.existsById(userId);
     return new ProductResponseDto(isExisted);
+  }
+
+  @Override
+  @Modifying
+  @Transactional
+  public LinkingResponseDto linkingAccount(Long userId, LinkRequestDto linkRequestDto) {
+    // userRepository.isLinked 연결되어 있을 시 0, 안되어 있을 시 1
+    if (userRepository.isLinked(userId) != 1) {
+      throw new CustomException(CustomErrorCode.ALREADY_LINKED_ACCOUNT);
+    }
+
+    LinkingRequestDto linkingRequestDto = loadByLinkingRequest(userId, linkRequestDto);
+    ApiResponse response = wooriMockServiceApi.linkingAccount(linkingRequestDto);
+
+    LinkingResponseDto linkingResponseDto = modelMapper.map(response.getData(),
+        LinkingResponseDto.class);
+    userRepository.updateAccount(userId, linkingResponseDto.getAccountNumber());
+
+    return linkingResponseDto;
+  }
+
+
+  private LinkingRequestDto loadByLinkingRequest(Long userId, LinkRequestDto linkRequestDto) {
+    String encrypt = crypto.encrypt(linkRequestDto.getPassword());
+
+    return LinkingRequestDto.builder()
+        .arteUserId(userId)
+        .name(linkRequestDto.getName())
+        .accountNumber(linkRequestDto.getAccountNumber())
+        .password(encrypt)
+        .build();
   }
 }
 
