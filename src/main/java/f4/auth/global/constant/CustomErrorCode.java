@@ -30,9 +30,10 @@ public enum CustomErrorCode {
 
   // Not Found 404
   NOT_FOUND_USER(404, "해당 회원을 찾을 수 없습니다."),
-  NOT_LIKED_ACCOUNT(404, "연결된 계좌가 존재하지 않습니다.");
+  NOT_LIKED_ACCOUNT(404, "연결된 계좌가 존재하지 않습니다."),
 
   // Server Error
+  NOT_RESPONSE_FEIGN(500, "Feign 응답이 오지 않습니다.");
 
   private final int code;
   private final String message;

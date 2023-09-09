@@ -8,7 +8,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(value = "Mock", url = "https://5ca4-14-32-118-124.ngrok-free.app")
+@FeignClient(value = "Mock", url = "${woori.mock}")
 public interface WooriMockServiceApi {
 
   @PostMapping("/woori/account/v1/linking")
