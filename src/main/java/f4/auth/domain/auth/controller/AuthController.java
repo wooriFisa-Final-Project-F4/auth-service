@@ -48,10 +48,10 @@ public class AuthController {
     headers.setContentType(MediaType.APPLICATION_JSON);
     headers.add(HttpHeaders.AUTHORIZATION,
         responseDto.getGrantType() + responseDto.getAccessToken());
+    headers.add("Set-Cookie", responseCookie.toString());
 
     return ResponseEntity.status(HttpStatus.OK)
         .headers(headers)
-        .header(HttpHeaders.COOKIE, responseCookie.toString())
         .body("로그인에 성공하셨습니다.");
   }
 
