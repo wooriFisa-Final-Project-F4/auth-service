@@ -7,7 +7,6 @@ import f4.auth.domain.user.constant.ApiStatus;
 import f4.auth.domain.user.dto.request.LinkRequestDto;
 import f4.auth.domain.user.dto.request.SignupRequestDto;
 import f4.auth.domain.user.dto.response.LinkingResponseDto;
-import f4.auth.domain.user.service.feign.dto.response.UserCheckResponseDto;
 import f4.auth.domain.user.dto.response.ProductResponseDto;
 import f4.auth.domain.user.dto.response.UserResponseDto;
 import f4.auth.domain.user.persist.entity.User;
@@ -18,11 +17,11 @@ import f4.auth.domain.user.service.feign.dto.request.CheckBalanceRequestDto;
 import f4.auth.domain.user.service.feign.dto.request.LinkingRequestDto;
 import f4.auth.domain.user.service.feign.dto.response.ApiResponse;
 import f4.auth.domain.user.service.feign.dto.response.CheckBalanceResponseDto;
+import f4.auth.domain.user.service.feign.dto.response.UserCheckResponseDto;
 import f4.auth.global.constant.CustomErrorCode;
 import f4.auth.global.exception.CustomException;
 import f4.auth.global.exception.FeignException;
 import f4.auth.global.utils.Encryptor;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -128,13 +127,12 @@ public class UserServiceImpl implements UserService {
     }
 
     LinkingRequestDto linkingRequestDto = loadByLinkingRequest(userId, linkRequestDto);
-
     ApiResponse<?> response = wooriMockServiceApi.linkingAccount(linkingRequestDto);
 
     if (SUCCESS != ApiStatus.of(response.getStatus())) {
       throw new FeignException(response.getError());
-
     }
+
     LinkingResponseDto linkingResponseDto = modelMapper.map(response.getData(), LinkingResponseDto.class);
     userRepository.updateAccount(userId, linkingResponseDto.getAccountNumber());
 

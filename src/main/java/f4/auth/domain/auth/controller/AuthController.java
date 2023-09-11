@@ -41,17 +41,11 @@ public class AuthController {
       @Valid @RequestBody LoginRequestDto loginRequestDto) {
     log.info("로그인 수행. 회원 이메일 : {}", loginRequestDto.getEmail());
     TokenResponseDto responseDto = authService.login(loginRequestDto);
-    ResponseCookie responseCookie = cookieProvider.createRefreshTokenCookie(
-        responseDto.getRefreshToken());
-
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
-    headers.add(HttpHeaders.AUTHORIZATION,
-        responseDto.getGrantType() + responseDto.getAccessToken());
-    headers.add("Set-Cookie", responseCookie.toString());
+    ResponseCookie responseCookie = cookieProvider.createRefreshTokenCookie(responseDto.getRefreshToken());
 
     return ResponseEntity.status(HttpStatus.OK)
-        .headers(headers)
+        .header(HttpHeaders.AUTHORIZATION, responseDto.getGrantType() + responseDto.getAccessToken())
+        .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
         .body("로그인에 성공하셨습니다.");
   }
 

@@ -9,16 +9,16 @@ import org.springframework.stereotype.Component;
 public class CookieProvider {
 
   @Value("${jwt.token.refresh-token-duration}")
-  private String refreshTokenExpiredTime;
+  private Long refreshTokenExpiredTime;
 
   public ResponseCookie createRefreshTokenCookie(String refreshToken) {
     return ResponseCookie.from("refresh-token", refreshToken)
+        .domain("artemoderni.web.app")
         .httpOnly(true)
         .secure(true)
-        .domain("artemoderni.web.app")
         .sameSite("None")
         .path("/")
-        .maxAge(Long.parseLong(refreshTokenExpiredTime))
+        .maxAge(refreshTokenExpiredTime / 1000)
         .build();
   }
 
