@@ -22,6 +22,8 @@ import f4.auth.global.constant.CustomErrorCode;
 import f4.auth.global.exception.CustomException;
 import f4.auth.global.exception.FeignException;
 import f4.auth.global.utils.Encryptor;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.transaction.Transactional;
@@ -117,24 +119,30 @@ public class UserServiceImpl implements UserService {
   @Override
   @Modifying
   @Transactional
+  @Retry(name = "linkingAccount", fallbackMethod = "getLinkingAccountFallback")
   public LinkingResponseDto linkingAccount(Long userId, LinkRequestDto linkRequestDto) {
     // userRepository.isLinked 연결되어 있을 시 0, 안되어 있을 시 1
-    if (userRepository.isLinked(userId) != 1) {
+    if (userRepository.isLinked(userId)!=1) {
+      log.error("ErrorMessage : {}", CustomErrorCode.ALREADY_LINKED_ACCOUNT.getMessage());
       throw new CustomException(CustomErrorCode.ALREADY_LINKED_ACCOUNT);
     }
 
     LinkingRequestDto linkingRequestDto = loadByLinkingRequest(userId, linkRequestDto);
+
     ApiResponse<?> response = wooriMockServiceApi.linkingAccount(linkingRequestDto);
 
     if (SUCCESS != ApiStatus.of(response.getStatus())) {
       throw new FeignException(response.getError());
-    }
 
-    LinkingResponseDto linkingResponseDto = modelMapper.map(response.getData(),
-        LinkingResponseDto.class);
+    }
+    LinkingResponseDto linkingResponseDto = modelMapper.map(response.getData(), LinkingResponseDto.class);
     userRepository.updateAccount(userId, linkingResponseDto.getAccountNumber());
 
     return linkingResponseDto;
+  }
+
+  public LinkingResponseDto getLinkingAccountFallback(Throwable e) {
+    throw new CustomException(CustomErrorCode.NOT_RESPONSE_FEIGN);
   }
 
   @Override

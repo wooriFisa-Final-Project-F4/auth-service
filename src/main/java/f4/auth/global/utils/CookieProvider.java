@@ -14,16 +14,16 @@ public class CookieProvider {
   public ResponseCookie createRefreshTokenCookie(String refreshToken) {
     return ResponseCookie.from("refresh-token", refreshToken)
         .httpOnly(true)
-        .secure(false)
+        .secure(true)
+        .domain("artemoderni.web.app")
+        .sameSite("None")
         .path("/")
-        .maxAge(Long.parseLong(refreshTokenExpiredTime)).build();
+        .maxAge(Long.parseLong(refreshTokenExpiredTime))
+        .build();
   }
 
   public ResponseCookie removeRefreshTokenCookie() {
-    return ResponseCookie.from("refresh-token", null)
-        .maxAge(0)
-        .path("/")
-        .build();
+    return ResponseCookie.from("refresh-token", null).maxAge(0).path("/").build();
   }
 
   public Cookie of(ResponseCookie responseCookie) {
