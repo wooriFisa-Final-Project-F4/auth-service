@@ -88,8 +88,6 @@ public class JwtTokenProvider {
           .build()
           .parseClaimsJws(token)
           .getBody();
-    } catch (ExpiredJwtException e) {
-      throw new ExpiredTokenException(CustomErrorCode.EXPIRED_ACCESS_TOKEN);
     } catch (InvalidTokenException e) {
       throw new InvalidTokenException(CustomErrorCode.INVALID_ACCESS_TOKEN);
     } catch (Exception e) {
