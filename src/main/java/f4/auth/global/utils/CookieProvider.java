@@ -13,7 +13,6 @@ public class CookieProvider {
 
   public ResponseCookie createRefreshTokenCookie(String refreshToken) {
     return ResponseCookie.from("refresh-token", refreshToken)
-        .domain("artemoderni.web.app")
         .httpOnly(true)
         .secure(true)
         .sameSite("None")
