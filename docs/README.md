@@ -1,6 +1,7 @@
 # USER & AUTH Service
 > Spring Cloud를 활용한 User & Auth API를 담당하는 서버입니다.<br> 
 > 위 서버는 사용자의 계좌를 외부 서버와의 통신을 통해 연결하기 떄문에 Open Feign 통신을 합니다.
+<br>
 
 ## 목차
 - [Overview](#-overview) <br>
@@ -8,6 +9,7 @@
 - [Auth Service 기능](#-auth-service-기능) <br>
 - [User Service 기능](#-user-service-기능) <br>
 - [User Server 실행](#user-서버-실행) <br>
+<br>
 
 ## 🛠️ Dependency
 
@@ -21,6 +23,8 @@
 |   Monitoring   | - Actuator <br> - Spring Cloud Sleuth                                       |
 |    Incident    | - Resilience4J    <br>                                                      |
 
+<br>
+
 ## 📝 Auth Service 기능
 
 |   기능   | 내용                                                                                                 |
@@ -28,6 +32,8 @@
 |  로그인   | 사용자로부터 정보를 입력받아 신원을 확인 후,<br>**JWT Access Token (Local Storage) & Refresh (Cookie) 토큰을 발행**한다.     |
 | 토큰 재발행 | 사용자의 Access Token이 만료될 시,<br> Redis에 저장된 Refresh token 여부 및 Validation 통해 신원 확인 후 Access Token 재발행 |
 |  로그아웃  | 사용자의 Access Token은 로그아웃 시 블랙리스트의 등록 및 Redis Refresh Token 삭제                                       |
+
+<br>
 
 <details>
 <summary> 로그인 상세  접기/펼치기</summary>
@@ -108,6 +114,7 @@ set-cookie: refresh-token=[Refresh Token], httponly, secure, SameTime=None
 
 <br>
 </details>
+<br>
 
 ## 📝 User Service 기능
 
@@ -165,6 +172,7 @@ set-cookie: refresh-token=[Refresh Token], httponly, secure, SameTime=None
 
 <br>
 </details>
+<br>
 
 ## User 서버 실행
 ### 1. 원격 저장소 복제
