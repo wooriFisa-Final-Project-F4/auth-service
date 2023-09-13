@@ -4,14 +4,13 @@
 <br>
 
 ## 목차
-- [Overview](#-overview) <br>
 - [Dependency](#-dependency) <br>
 - [Auth Service 기능](#-auth-service-기능) <br>
 - [User Service 기능](#-user-service-기능) <br>
 - [User Server 실행](#user-서버-실행) <br>
 <br>
-## 🛠️ Dependency
 
+## 🛠️ Dependency
 |       기능       | 기술 스택                                                                       |
 |:--------------:|:----------------------------------------------------------------------------|
 |  Spring Boot   | - Spring Framework 2.7.15<br> - Java 17 <br> - Gradle 8.0 <br> - Spring Web |
