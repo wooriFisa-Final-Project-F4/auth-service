@@ -10,7 +10,6 @@
 - [User Service 기능](#-user-service-기능) <br>
 - [User Server 실행](#user-서버-실행) <br>
 <br>
-
 ## 🛠️ Dependency
 
 |       기능       | 기술 스택                                                                       |
@@ -178,7 +177,9 @@ set-cookie: refresh-token=[Refresh Token], httponly, secure, SameTime=None
 ### 1. 원격 저장소 복제
 ```shell
 $git clone https://github.com/wooriFisa-Final-Project-F4/user-service.git
-``` 
+```
+<br>
+
 ### 2. root/src/main/resource 이동
 ```shell
 cd [프로젝트 클론 위치]
@@ -186,6 +187,7 @@ cd src
 cd main
 cd resource
 ``` 
+<br>
 
 ### 3. 프로젝트 설정 파일 작성 (application.properties)
 📌 프로젝트 첫 생성 시 별도의 DB 테이블 생성해주지 않았을 경우 
