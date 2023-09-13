@@ -16,11 +16,6 @@ Spring Cloud를 활용한 User & Auth 기능을 담당한 서버입니다.
 |   Monitoring   | - Actuator <br> - Spring Cloud Sleuth                                       |
 |    Incident    | - Resilience4J <br>                                                         |
 
-## System Architecture
-
-<img width="1618" alt="Architect (2) 복사본" src="https://github.com/wooriFisa-Final-Project-F4/.github/assets/109801772/27ac2b1d-8624-424f-aefb-4ceda4484b63">
-
-
 ## Auth Service 기능
 
 |   기능   | 내용                                                                                                 |
@@ -89,6 +84,7 @@ set-cookie: refresh-token=[Refresh Token], httponly, secure, SameTime=None
 
 
 </table>
+<br>
 </details>
 
 <details>
@@ -97,6 +93,7 @@ set-cookie: refresh-token=[Refresh Token], httponly, secure, SameTime=None
 ```
 ```
 
+<br>
 </details>
 <details>
 <summary> 로그인 상세  접기/펼치기</summary>
@@ -104,6 +101,7 @@ set-cookie: refresh-token=[Refresh Token], httponly, secure, SameTime=None
 ```
 ```
 
+<br>
 </details>
 
 ## User Service 기능
@@ -124,6 +122,7 @@ set-cookie: refresh-token=[Refresh Token], httponly, secure, SameTime=None
 ```
 ```
 
+<br>
 </details>
 
 <details>
@@ -132,6 +131,7 @@ set-cookie: refresh-token=[Refresh Token], httponly, secure, SameTime=None
 ```
 ```
 
+<br>
 </details>
 
 <details>
@@ -140,6 +140,7 @@ set-cookie: refresh-token=[Refresh Token], httponly, secure, SameTime=None
 ```
 ```
 
+<br>
 </details>
 
 <details>
@@ -148,6 +149,7 @@ set-cookie: refresh-token=[Refresh Token], httponly, secure, SameTime=None
 ```
 ```
 
+<br>
 </details>
 
 <details>
@@ -156,6 +158,7 @@ set-cookie: refresh-token=[Refresh Token], httponly, secure, SameTime=None
 ```
 ```
 
+<br>
 </details>
 
 
