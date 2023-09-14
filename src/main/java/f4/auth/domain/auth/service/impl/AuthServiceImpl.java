@@ -81,14 +81,19 @@ public class AuthServiceImpl implements AuthService {
 
   @Override
   public void logout(String accessToken) {
-    accessToken = jwtTokenProvider.parseToken(accessToken);
-    Claims claims = jwtTokenProvider.extractAllClaims(accessToken);
-
-    String email = claims.getSubject();
-    Date expired = claims.getExpiration();
-
-    if (!redisService.hasBlackList(accessToken) && expired.after(new Date())) {
+    if (redisService.hasBlackList(accessToken)) {
       throw new CustomException(CustomErrorCode.ALREADY_LOGOUT_USER);
+    }
+
+    accessToken = jwtTokenProvider.parseToken(accessToken);
+    Claims accessClaims = jwtTokenProvider.extractAllClaims(accessToken);
+
+    String email = accessClaims.getSubject();
+    Date expired = accessClaims.getExpiration();
+
+    if (expired.after(new Date()) && redisService.hasBlackList(email)) {
+      redisService.deleteData(email);
+      return;
     }
 
     redisService.deleteData(email);
