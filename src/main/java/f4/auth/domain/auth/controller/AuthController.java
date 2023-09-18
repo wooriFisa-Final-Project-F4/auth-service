@@ -81,6 +81,7 @@ public class AuthController {
   public ResponseEntity<?> logout(@RequestHeader("Authorization") String accessToken) {
     log.info("로그아웃 수행.");
     authService.logout(accessToken);
+    log.info("로그아웃 성공하셨습니다.");
     return ResponseEntity.status(HttpStatus.OK)
         .body("로그아웃에 성공하셨습니다.");
   }

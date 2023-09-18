@@ -82,16 +82,10 @@ public class JwtTokenProvider {
   }
 
   public Claims extractAllClaims(String token) {
-    try {
-      return Jwts.parserBuilder()
-          .setSigningKey(getSigningKey(SECRET_KEY))
-          .build()
-          .parseClaimsJws(token)
-          .getBody();
-    } catch (InvalidTokenException e) {
-      throw new InvalidTokenException(CustomErrorCode.INVALID_ACCESS_TOKEN);
-    } catch (Exception e) {
-      throw new CustomException(CustomErrorCode.INVALID_REFRESH_TOKEN);
-    }
+    return Jwts.parserBuilder()
+        .setSigningKey(getSigningKey(SECRET_KEY))
+        .build()
+        .parseClaimsJws(token)
+        .getBody();
   }
 }

@@ -91,7 +91,7 @@ public class AuthServiceImpl implements AuthService {
     String email = accessClaims.getSubject();
     Date expired = accessClaims.getExpiration();
 
-    if (expired.after(new Date()) && redisService.hasBlackList(email)) {
+    if (!expired.after(new Date()) && redisService.hasBlackList(email)) {
       redisService.deleteData(email);
       return;
     }
