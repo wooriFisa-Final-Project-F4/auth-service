@@ -82,10 +82,14 @@ public class JwtTokenProvider {
   }
 
   public Claims extractAllClaims(String token) {
-    return Jwts.parserBuilder()
-        .setSigningKey(getSigningKey(SECRET_KEY))
-        .build()
-        .parseClaimsJws(token)
-        .getBody();
+    try {
+      return Jwts.parserBuilder()
+          .setSigningKey(getSigningKey(SECRET_KEY))
+          .build()
+          .parseClaimsJws(token)
+          .getBody();
+    } catch (ExpiredJwtException e) { // Access Token
+      return e.getClaims();
+    }
   }
 }
