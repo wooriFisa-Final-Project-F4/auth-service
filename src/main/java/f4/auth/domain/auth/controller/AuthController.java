@@ -96,6 +96,7 @@ public class AuthController {
   public ResponseEntity<?> emailCertification(@RequestBody CertificationRequestDto certificationRequestDto) {
     log.info("회원가입 이메일 인증 수행. email : {}", certificationRequestDto.getEmail());
     authService.emailCertification(certificationRequestDto);
+    log.info("회원가입 이메일 인증 완료");
     return ResponseEntity.status(HttpStatus.OK)
         .body("이메일이 인증되었습니다.");
   }
